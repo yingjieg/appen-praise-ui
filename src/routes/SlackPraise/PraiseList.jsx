@@ -17,7 +17,7 @@ class PraiseList extends PureComponent {
 
     this.state = {
       praises: [],
-      cursor: -1,
+      cursor: 0,
       isLoading: false,
       hasMore: true,
       onTop: true,
@@ -68,7 +68,7 @@ class PraiseList extends PureComponent {
       async () => {
         const praises = await getPraises(this.state.cursor);
         const len = praises.length;
-        let cursor = -1;
+        let cursor = 0;
         if (len > 1) {
           cursor = praises[len - 1].id;
         }
