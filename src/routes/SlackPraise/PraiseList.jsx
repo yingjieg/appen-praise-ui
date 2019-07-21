@@ -31,29 +31,7 @@ class PraiseList extends PureComponent {
 
   componentDidMount() {
     this.loadPraises();
-
-    client.onopen = () => {
-      console.log('WebSocket Client Connected');
-    };
-    client.onmessage = message => {
-      try {
-        const jsonData = JSON.parse(message.data);
-
-        if (this.state.onTop) {
-          this.setState(prevState => ({
-            ...prevState,
-            praises: [jsonData, ...prevState.praises],
-          }));
-        } else {
-          this.setState(prevState => ({
-            ...prevState,
-            newPraises: [jsonData, ...prevState.newPraises],
-          }));
-        }
-      } catch (e) {
-        console.error(message);
-      }
-    };
+    this.initWebsocket();
   }
 
   componentWillUnmount() {
@@ -82,6 +60,31 @@ class PraiseList extends PureComponent {
         }));
       }
     );
+  };
+
+  initWebsocket = () => {
+    client.onopen = () => {
+      console.log('WebSocket Client Connected');
+    };
+    client.onmessage = message => {
+      try {
+        const jsonData = JSON.parse(message.data);
+
+        if (this.state.onTop) {
+          this.setState(prevState => ({
+            ...prevState,
+            praises: [jsonData, ...prevState.praises],
+          }));
+        } else {
+          this.setState(prevState => ({
+            ...prevState,
+            newPraises: [jsonData, ...prevState.newPraises],
+          }));
+        }
+      } catch (e) {
+        console.error(message);
+      }
+    };
   };
 
   scrollHandler = () => {
@@ -126,16 +129,14 @@ class PraiseList extends PureComponent {
           component="div"
           className="flex-container"
         >
-          <>
-            {praises.map(praise => (
-              <PraiseTile
-                key={praise.id}
-                text={praise.text}
-                userName={praise.userName}
-                createdAt={praise.createdAt}
-              />
-            ))}
-          </>
+          {praises.map(praise => (
+            <PraiseTile
+              key={praise.id}
+              text={praise.text}
+              userName={praise.userName}
+              createdAt={praise.createdAt}
+            />
+          ))}
         </CSSTransitionGroup>
         {isLoading && <div>Loading...</div>}
         {!hasMore && <div>No more data!</div>}
