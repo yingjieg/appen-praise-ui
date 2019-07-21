@@ -1,7 +1,14 @@
 import React, { PureComponent } from 'react';
 import debounce from 'lodash/debounce';
+
 import PraiseTile from './components/PraiseTile';
 import { getPraises } from '../../services/praise';
+import Notifier from './components/Notifier';
+
+const { location } = window;
+let proto = location.protocol === 'https' ? 'wss' : 'ws';
+
+const client = new WebSocket(`${proto}://${location.host}/ws`);
 
 class PraiseList extends PureComponent {
   constructor(props) {
@@ -13,6 +20,7 @@ class PraiseList extends PureComponent {
       isLoading: false,
       hasMore: true,
       onTop: true,
+      newPraises: [],
     };
 
     this.debouncedScrollHandler = debounce(this.scrollHandler, 200);
@@ -21,7 +29,30 @@ class PraiseList extends PureComponent {
   }
 
   async componentDidMount() {
-    this.loadPraises();
+    await this.loadPraises();
+
+    client.onopen = () => {
+      console.log('WebSocket Client Connected');
+    };
+    client.onmessage = message => {
+      try {
+        const jsonData = JSON.parse(message.data);
+
+        if (this.state.onTop) {
+          this.setState(prevState => ({
+            ...prevState,
+            praises: [jsonData, ...prevState.praises],
+          }));
+        } else {
+          this.setState(prevState => ({
+            ...prevState,
+            newPraises: [jsonData, ...prevState.newPraises],
+          }));
+        }
+      } catch (e) {
+        console.error(message);
+      }
+    };
   }
 
   componentWillUnmount() {
@@ -69,10 +100,22 @@ class PraiseList extends PureComponent {
     }
   };
 
+  handlerNotifierClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.setState(prevState => ({
+      ...prevState,
+      praises: [...prevState.newPraises, ...prevState.praises],
+      newPraises: [],
+    }));
+  };
+
   render() {
-    const { praises, isLoading, hasMore } = this.state;
+    const { praises, isLoading, hasMore, newPraises, onTop } = this.state;
     return (
       <div>
+        {newPraises.length > 0 && !onTop && (
+          <Notifier onClick={this.handlerNotifierClick} />
+        )}
         <div
           style={{
             display: 'flex',

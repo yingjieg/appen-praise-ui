@@ -41,8 +41,7 @@ function PraiseTile({ text, userName, createdAt }) {
             letterSpacing: '0.01071em',
           }}
         >
-          <a href="https://www.google.com">@guoyj</a> Did you like those
-          mockups? If yes, you can help
+          {text}
         </p>
       </div>
     </div>

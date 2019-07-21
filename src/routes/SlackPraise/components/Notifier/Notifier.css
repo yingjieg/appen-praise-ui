@@ -1,0 +1,11 @@
+.notifier-box {
+  width: 200px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: darkgrey;
+  text-align: center;
+  align-content: center;
+
+  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+}
