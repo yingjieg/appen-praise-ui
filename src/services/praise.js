@@ -1,6 +1,6 @@
 import request from '../utils/request';
 
-export function getPraises(cursor = -1, previous = true) {
+export function getPraises(cursor = -1, previous = true, limit = 20) {
   return new Promise((resolve, reject) => {
     request({
       url: '/api/messages',

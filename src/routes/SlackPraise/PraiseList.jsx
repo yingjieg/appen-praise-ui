@@ -9,41 +9,82 @@ class PraiseList extends PureComponent {
     this.state = {
       praises: [],
       cursor: -1,
+      isLoading: false,
+      hasMore: true,
     };
+
+    window.addEventListener('scroll', this.scrollHandler);
   }
 
   async componentDidMount() {
-    const praises = await getPraises();
-    const [lastPraise] = praises;
-
-    let cursor = -1;
-    if (lastPraise) {
-      cursor = lastPraise.id;
-    }
-
-    this.setState({ praises, cursor });
+    this.loadPraises();
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.scrollHandler);
+  }
+
+  loadPraises = () => {
+    this.setState(
+      {
+        isLoading: true,
+      },
+      async () => {
+        const praises = await getPraises(this.state.cursor);
+        const len = praises.length;
+        let cursor = -1;
+        if (len > 1) {
+          cursor = praises[len - 1].id;
+        }
+
+        this.setState(prevState => ({
+          ...prevState,
+          cursor,
+          hasMore: len === 10,
+          isLoading: false,
+          praises: [...prevState.praises, ...praises],
+        }));
+      }
+    );
+  };
+
+  scrollHandler = () => {
+    const { isLoading, hasMore } = this.state;
+
+    if (isLoading || !hasMore) {
+      return;
+    }
+
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.documentElement.offsetHeight
+    ) {
+      this.loadPraises();
+    }
+  };
 
   render() {
-    const { praises } = this.state;
+    const { praises, isLoading, hasMore } = this.state;
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-        }}
-      >
-        {praises.map(praise => (
-          <PraiseTile
-            key={praise.id}
-            text={praise.text}
-            userName={praise.userName}
-            createdAt={praise.createdAt}
-          />
-        ))}
+      <div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+          }}
+        >
+          {praises.map(praise => (
+            <PraiseTile
+              key={praise.id}
+              text={praise.text}
+              userName={praise.userName}
+              createdAt={praise.createdAt}
+            />
+          ))}
+        </div>
+        {isLoading && <div>Loading...</div>}
+        {!hasMore && <div>No more data!</div>}
       </div>
     );
   }
