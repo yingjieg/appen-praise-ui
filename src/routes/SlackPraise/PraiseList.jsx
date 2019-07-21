@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import debounce from 'lodash/debounce';
 import PraiseTile from './components/PraiseTile';
 import { getPraises } from '../../services/praise';
 
@@ -11,9 +12,12 @@ class PraiseList extends PureComponent {
       cursor: -1,
       isLoading: false,
       hasMore: true,
+      onTop: true,
     };
 
-    window.addEventListener('scroll', this.scrollHandler);
+    this.debouncedScrollHandler = debounce(this.scrollHandler, 200);
+
+    window.addEventListener('scroll', this.debouncedScrollHandler);
   }
 
   async componentDidMount() {
@@ -21,7 +25,7 @@ class PraiseList extends PureComponent {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.scrollHandler);
+    window.removeEventListener('scroll', this.debouncedScrollHandler);
   }
 
   loadPraises = () => {
@@ -50,6 +54,8 @@ class PraiseList extends PureComponent {
 
   scrollHandler = () => {
     const { isLoading, hasMore } = this.state;
+
+    this.setState({ onTop: document.documentElement.scrollTop <= 200 });
 
     if (isLoading || !hasMore) {
       return;
