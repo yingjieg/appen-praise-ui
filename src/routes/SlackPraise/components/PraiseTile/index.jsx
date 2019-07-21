@@ -8,14 +8,18 @@ function formattedDate(dateStr) {
 }
 
 function getMentionedUserName(message) {
+  if (!message) {
+    return '';
+  }
+  
   const groups = message.match(/@([a-z0-9_-]*)/);
 
-  return groups ? groups[0] : null;
+  return groups ? groups[0] : '';
 }
 
 function PraiseTile({ text, userName, createdAt }) {
   const metioned = getMentionedUserName(text);
-  const message = text.replace(metioned, '');
+  const message = metioned ? text.replace(metioned, '') : text;
 
   return (
     <div className="box" style={{}}>
