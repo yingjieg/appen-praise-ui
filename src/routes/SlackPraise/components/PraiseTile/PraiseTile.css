@@ -1,8 +1,80 @@
 .box {
-    transition: box-shadow 0.4s;
+  transition: box-shadow 0.4s;
+
+  margin: 10px;
+  display: flex;
+  padding: 20px;
+  width: 370px;
+  min-height: 120px;
+  border-radius: 5px;
+  color: rgba(0, 0, 0, 0.65);
+  border: 1px solid #ebedf0;
 }
 
 .box:hover {
-    box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
-    cursor: pointer;
+  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+  cursor: pointer;
+}
+
+.main-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tile-avatar img {
+  /*border-radius: 50 */
+  margin-top: 14px;
+  height: 48px;
+  width: 48px;
+}
+
+.tile-content {
+  width: 100%;
+  position: relative;
+  margin-left: 16px;
+  font-size: 1.0rem;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.43;
+  letter-spacing: 0.01071em;
+}
+
+.tile-metioned-user {
+  color: #f48b62;
+  font-size: 1.2rem;
+  margin-right: 5px;
+}
+
+.tile-footer {
+  width: 100%;
+  font-size: 0.9rem;
+  position: absolute;
+  bottom: 0;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* tile ease animation */
+
+.tile-enter {
+  opacity: 0.01;
+}
+
+.tile-enter.tile-enter-active {
+  opacity: 1;
+  transition: opacity 1000ms ease-in-out;
+}
+
+.tile-leave {
+  opacity: 1;
+}
+
+.tile-leave.tile-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in-out;
 }

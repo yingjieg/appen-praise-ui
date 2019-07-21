@@ -14,11 +14,11 @@ function Notifier({ messageNumbers, onClick }) {
       style={{
         position: 'fixed',
         top: 15,
-        left: 'calc(50% - 160px)',
+        left: 'calc(50% - 100px)',
       }}
     >
       <div className="notifier-box" onClick={handleClick}>
-        {`new message arrived`}
+        {`New message arrived`}
       </div>
     </div>
   );

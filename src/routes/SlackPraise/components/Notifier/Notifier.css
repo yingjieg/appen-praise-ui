@@ -3,9 +3,7 @@
   height: 40px;
   cursor: pointer;
   border-radius: 5px;
-  background-color: darkgrey;
+  background-color: #d1d1d1;
   text-align: center;
-  align-content: center;
-
-  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+  line-height: 40px;
 }

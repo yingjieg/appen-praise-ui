@@ -1,11 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
-//import './App.css';
+import './App.css';
 import SlackPraise from './routes/SlackPraise/PraiseList';
 
 function App() {
   return (
-    <div className="App">
+    <div>
+      <div className="App-header">
+        <h2>Appen Praises</h2>
+      </div>
       <SlackPraise />
     </div>
   );

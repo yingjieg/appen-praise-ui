@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import debounce from 'lodash/debounce';
+import { CSSTransitionGroup } from 'react-transition-group';
 
 import PraiseTile from './components/PraiseTile';
 import { getPraises } from '../../services/praise';
@@ -28,8 +29,8 @@ class PraiseList extends PureComponent {
     window.addEventListener('scroll', this.debouncedScrollHandler);
   }
 
-  async componentDidMount() {
-    await this.loadPraises();
+  componentDidMount() {
+    this.loadPraises();
 
     client.onopen = () => {
       console.log('WebSocket Client Connected');
@@ -111,27 +112,31 @@ class PraiseList extends PureComponent {
 
   render() {
     const { praises, isLoading, hasMore, newPraises, onTop } = this.state;
+
     return (
-      <div>
+      <div className="main-container">
         {newPraises.length > 0 && !onTop && (
           <Notifier onClick={this.handlerNotifierClick} />
         )}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-          }}
+
+        <CSSTransitionGroup
+          transitionName="tile"
+          transitionEnterTimeout={1000}
+          transitionLeaveTimeout={300}
+          component="div"
+          className="flex-container"
         >
-          {praises.map(praise => (
-            <PraiseTile
-              key={praise.id}
-              text={praise.text}
-              userName={praise.userName}
-              createdAt={praise.createdAt}
-            />
-          ))}
-        </div>
+          <>
+            {praises.map(praise => (
+              <PraiseTile
+                key={praise.id}
+                text={praise.text}
+                userName={praise.userName}
+                createdAt={praise.createdAt}
+              />
+            ))}
+          </>
+        </CSSTransitionGroup>
         {isLoading && <div>Loading...</div>}
         {!hasMore && <div>No more data!</div>}
       </div>
