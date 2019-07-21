@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './PraiseTile.css';
 import avatarIcon from '../../../../assets/avatar.png';
@@ -11,13 +12,13 @@ function getMentionedUserName(message) {
   if (!message) {
     return '';
   }
-  
+
   const groups = message.match(/@([a-z0-9_-]*)/);
 
   return groups ? groups[0] : '';
 }
 
-function PraiseTile({ text, userName, createdAt }) {
+function PraiseTile({ text, userName }) {
   const metioned = getMentionedUserName(text);
   const message = metioned ? text.replace(metioned, '') : text;
 
@@ -41,5 +42,11 @@ function PraiseTile({ text, userName, createdAt }) {
     </div>
   );
 }
+
+PraiseTile.propTypes = {
+  text: PropTypes.string.isRequired,
+  userName: PropTypes.string.isRequired,
+  createdAt: PropTypes.string,
+};
 
 export default PraiseTile;

@@ -1,27 +1,25 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import './Notifier.css';
 
-function Notifier({ messageNumbers, onClick }) {
+function Notifier({ onClick }) {
   const handleClick = e => {
     e.preventDefault();
-    if (onClick) {
-      onClick();
-    }
+    onClick();
   };
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 15,
-        left: 'calc(50% - 100px)',
-      }}
-    >
+    <div className="notifier-container">
       <div className="notifier-box" onClick={handleClick}>
         {`New message arrived`}
       </div>
     </div>
   );
 }
+
+Notifier.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
 
 export default Notifier;

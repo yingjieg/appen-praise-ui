@@ -1,3 +1,9 @@
+.notifier-container {
+  position: fixed;
+  top: 15px;
+  left: calc(50% - 100px);
+}
+
 .notifier-box {
   width: 200px;
   height: 40px;
