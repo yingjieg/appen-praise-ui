@@ -1,0 +1,45 @@
+.main-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.main-footer {
+  height: 24px;
+  background: rgba(230, 230, 230, 0.3); 
+}
+
+.main-footer span {
+  display: block;
+  margin: 0 auto;
+  width: 160px;
+  padding: 5px;
+  font-size: 0.9rem;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: baseline;
+}
+
+/* tile ease animation */
+
+.tile-enter {
+  opacity: 0.01;
+}
+
+.tile-enter.tile-enter-active {
+  opacity: 1;
+  transition: opacity 1000ms ease-in-out;
+}
+
+.tile-leave {
+  opacity: 1;
+}
+
+.tile-leave.tile-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in-out;
+}

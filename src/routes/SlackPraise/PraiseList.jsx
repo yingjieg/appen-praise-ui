@@ -6,6 +6,8 @@ import PraiseTile from './components/PraiseTile';
 import { getPraises } from '../../services/praise';
 import Notifier from './components/Notifier';
 
+import './PraiseList.css';
+
 const { location } = window;
 let proto = location.protocol === 'https' ? 'wss' : 'ws';
 
@@ -138,8 +140,10 @@ class PraiseList extends PureComponent {
             />
           ))}
         </CSSTransitionGroup>
-        {isLoading && <div>Loading...</div>}
-        {!hasMore && <div>No more data!</div>}
+        <div className="main-footer">
+          {isLoading && <span>Loading...</span>}
+          {!hasMore && <span>No more data!</span>}
+        </div>
       </div>
     );
   }
