@@ -106,7 +106,7 @@ class PraiseList extends PureComponent {
     }
   };
 
-  handlerNotifierClick = () => {
+  handleNotifierClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     this.setState(prevState => ({
       ...prevState,
@@ -121,7 +121,7 @@ class PraiseList extends PureComponent {
     return (
       <div className="main-container">
         {newPraises.length > 0 && !onTop && (
-          <Notifier onClick={this.handlerNotifierClick} />
+          <Notifier onClick={this.handleNotifierClick} />
         )}
 
         <CSSTransitionGroup
