@@ -35,11 +35,11 @@
   transition: opacity 1000ms ease-in-out;
 }
 
-.tile-leave {
+.tile-exit {
   opacity: 1;
 }
 
-.tile-leave.tile-leave-active {
+.tile-exit.tile-exit-active {
   opacity: 0.01;
   transition: opacity 300ms ease-in-out;
 }

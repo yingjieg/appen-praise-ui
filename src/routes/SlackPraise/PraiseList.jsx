@@ -1,15 +1,15 @@
-import React, { PureComponent } from 'react';
-import debounce from 'lodash/debounce';
-import { CSSTransitionGroup } from 'react-transition-group';
+import React, { PureComponent } from "react";
+import debounce from "lodash/debounce";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
-import PraiseTile from './components/PraiseTile';
-import { getPraises } from '../../services/praise';
-import Notifier from './components/Notifier';
+import PraiseTile from "./components/PraiseTile";
+import { getPraises } from "../../services/praise";
+import Notifier from "./components/Notifier";
 
-import './PraiseList.css';
+import "./PraiseList.css";
 
 const { location } = window;
-let proto = location.protocol === 'https' ? 'wss' : 'ws';
+let proto = location.protocol === "https" ? "wss" : "ws";
 
 const client = new WebSocket(`${proto}://${location.host}/ws`);
 
@@ -28,7 +28,7 @@ class PraiseList extends PureComponent {
 
     this.debouncedScrollHandler = debounce(this.scrollHandler, 200);
 
-    window.addEventListener('scroll', this.debouncedScrollHandler);
+    window.addEventListener("scroll", this.debouncedScrollHandler);
   }
 
   componentDidMount() {
@@ -37,7 +37,7 @@ class PraiseList extends PureComponent {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.debouncedScrollHandler);
+    window.removeEventListener("scroll", this.debouncedScrollHandler);
   }
 
   loadPraises = () => {
@@ -53,7 +53,7 @@ class PraiseList extends PureComponent {
           cursor = praises[len - 1].id;
         }
 
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
           ...prevState,
           cursor,
           hasMore: len === 10,
@@ -66,19 +66,19 @@ class PraiseList extends PureComponent {
 
   initWebsocket = () => {
     client.onopen = () => {
-      console.log('WebSocket Client Connected');
+      console.log("WebSocket Client Connected");
     };
-    client.onmessage = message => {
+    client.onmessage = (message) => {
       try {
         const jsonData = JSON.parse(message.data);
 
         if (this.state.onTop) {
-          this.setState(prevState => ({
+          this.setState((prevState) => ({
             ...prevState,
             praises: [jsonData, ...prevState.praises],
           }));
         } else {
-          this.setState(prevState => ({
+          this.setState((prevState) => ({
             ...prevState,
             newPraises: [jsonData, ...prevState.newPraises],
           }));
@@ -107,8 +107,8 @@ class PraiseList extends PureComponent {
   };
 
   handleNotifierClick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    this.setState(prevState => ({
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    this.setState((prevState) => ({
       ...prevState,
       praises: [...prevState.newPraises, ...prevState.praises],
       newPraises: [],
@@ -124,22 +124,25 @@ class PraiseList extends PureComponent {
           <Notifier onClick={this.handleNotifierClick} />
         )}
 
-        <CSSTransitionGroup
-          transitionName="tile"
-          transitionEnterTimeout={1000}
-          transitionLeaveTimeout={300}
-          component="div"
-          className="flex-container"
-        >
-          {praises.map(praise => (
-            <PraiseTile
+        <TransitionGroup className="flex-container">
+          {praises.map((praise) => (
+            <CSSTransition
               key={praise.id}
-              text={praise.text}
-              userName={praise.userName}
-              createdAt={praise.createdAt}
-            />
+              classNames="tile"
+              timeout={{
+                enter: 1000,
+                exit: 300,
+              }}
+              component="div"
+            >
+              <PraiseTile
+                text={praise.text}
+                userName={praise.userName}
+                createdAt={praise.createdAt}
+              />
+            </CSSTransition>
           ))}
-        </CSSTransitionGroup>
+        </TransitionGroup>
         <div className="main-footer">
           {isLoading && <span>Loading...</span>}
           {!hasMore && <span>No more data!</span>}
